@@ -9,6 +9,9 @@ class LinkedPair:
         self.value = value
         self.next = None
 
+    def __repr__(self):
+        return f"{self.key}, {self.value}"
+
 
 class HashTable:
     '''
@@ -59,6 +62,7 @@ class HashTable:
 
         # check if a pair exists in the bucket
         if pair is not None:
+            print(pair)
             if pair.key != key:
                 print("⚠️ Overwriting value...")
                 pair.key = key
@@ -76,10 +80,11 @@ class HashTable:
         '''
         index = self._hash_mod(key)
 
-        if self.storage[index] is not None:
+        # Check if a pair exists w/ matching key
+        if self.storage[index] is not None and self.storage[index].key == key:
             self.storage[index] = None
         else:
-            print("WARNING: Key not found")
+            print("⚠️ Key not found")
 
     def retrieve(self, key):
         '''
@@ -91,7 +96,10 @@ class HashTable:
         '''
         index = self._hash_mod(key)
 
-        return self.storage[index]
+        if self.storage[index] is not None and self.storage[index].key == key:
+            return f"{self.storage[index].key}: {self.storage[index].value}"
+        else:
+            return None
 
     def resize(self):
         '''
@@ -100,11 +108,16 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        old_storage = self.storage.copy()
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
+
+        for item in old_storage:
+            self.insert(item.key, item.value)
 
 
 if __name__ == "__main__":
-    ht = HashTable(2)
+    ht = HashTable(3)
 
     ht.insert("line_1", "Tiny hash table")
     ht.insert("line_2", "Filled beyond capacity")
