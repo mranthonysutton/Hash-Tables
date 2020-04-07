@@ -58,15 +58,17 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        pair = self.storage[index]
 
         # check if a pair exists in the bucket
-        if pair is not None:
-            print(pair)
-            if pair.key != key:
-                print("⚠️ Overwriting value...")
-                pair.key = key
-            pair.value = value
+        if self.storage[index] is not None:
+            print("⚠️  Key in use...")
+
+            pair = self.storage[index]
+
+            while pair.next:
+                pair = pair.next
+
+            pair.next = LinkedPair(key, value)
         else:
             self.storage[index] = LinkedPair(key, value)
 
@@ -108,8 +110,8 @@ class HashTable:
 
         Fill this in.
         '''
-        old_storage = self.storage.copy()
         self.capacity *= 2
+        old_storage = self.storage
         self.storage = [None] * self.capacity
 
         for item in old_storage:
