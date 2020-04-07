@@ -61,8 +61,7 @@ class HashTable:
 
         # check if a pair exists in the bucket
         if self.storage[index] is not None:
-            print("⚠️  Key in use...")
-
+            print("⚠️ Key in use...")
             pair = self.storage[index]
 
             while pair.next:
@@ -99,7 +98,7 @@ class HashTable:
         index = self._hash_mod(key)
 
         if self.storage[index] is not None and self.storage[index].key == key:
-            return f"{self.storage[index].key}: {self.storage[index].value}"
+            return self.storage[index].value
         else:
             return None
 
