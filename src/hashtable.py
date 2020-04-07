@@ -55,11 +55,16 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
+        pair = self.storage[index]
 
-        if self.storage[index] is not None:
-            print("ERROR: Key in use")
+        # check if a pair exists in the bucket
+        if pair is not None:
+            if pair.key != key:
+                print("⚠️ Overwriting value...")
+                pair.key = key
+            pair.value = value
         else:
-            self.storage[index] = value
+            self.storage[index] = LinkedPair(key, value)
 
     def remove(self, key):
         '''
